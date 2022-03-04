@@ -16,4 +16,4 @@ async def task_wait_n(n: int, max_delay: int) -> List[float]:
     for j in asyncio.as_completed(queue):
         result = await j
         array.append(result)
-    return array
+    return sorted(array)
