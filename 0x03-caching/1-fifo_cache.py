@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-'''Create a class FIFOCache that inherits from BaseCaching and is a caching system'''
+'''Create a class FIFOCache that inherits from BaseCaching'''
 
 from base_caching import BaseCaching
 
