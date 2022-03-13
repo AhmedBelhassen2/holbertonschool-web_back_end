@@ -51,4 +51,3 @@ class MRUCache (BaseCaching):
         removed = self.__stack.pop()
         del self.cache_data[removed]
         print(f"DISCARD: {removed}")
-
