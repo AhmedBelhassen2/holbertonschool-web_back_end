@@ -3,6 +3,8 @@
 from typing import Union, Callable, Optional, Any
 import redis
 import uuid
+import sys
+
 
 class Cache:
     """ class """
@@ -16,3 +18,16 @@ class Cache:
         key = str(uuid.uuid4())
         self._redis.set(key, data)
         return key
+
+    def get(self, key: str, fn: Optional[Callable] = None) -> Union[str, bytes, int, float]:
+        """  This callable will be used to convert the data back to the desired format. """
+        rds = self._redis.get(key)
+        return fn(rds) if fn else rds
+
+    def get_str(self, data: bytes) -> str:
+        """ Converts bytes to string. """
+        return data.decode('utf-8')
+
+    def get_int(self, data: bytes) -> int:
+        """ Converts bytes to int. """
+        return int.from_bytes(data, sys.byteorder)
