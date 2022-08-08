@@ -4,7 +4,7 @@ from typing import Union, Callable, Optional, Any
 import redis
 import uuid
 import sys
-
+from functools import wraps
 
 class Cache:
     """ class """
@@ -31,3 +31,19 @@ class Cache:
     def get_int(self, data: bytes) -> int:
         """ Converts bytes to int. """
         return int.from_bytes(data, sys.byteorder)
+
+    def count_calls(f: Callable) -> Callable:
+        """
+        Create and return function that increments the count
+        for that key every time the method is called and returns
+        the value returned by the original method.
+        """
+        key = f.__qualname__
+        @wraps(f)
+        def wrapper(self, *args, **kwds):
+            """
+            wrapper function
+            """
+            self._redis.incr(key)
+            return f(self, *args, **kwds)
+        return wrapper  
