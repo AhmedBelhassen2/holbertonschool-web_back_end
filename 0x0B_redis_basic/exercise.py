@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
-""" The open source, in-memory data store used
-by millions of developers as a database, cache,
-streaming engine, and message broker. """
+"""
+Redis basic module
+"""
 from typing import Union, Callable, Optional
 import redis
 import uuid
@@ -9,12 +9,12 @@ import sys
 from functools import wraps
 
 
-def count_calls(f: Callable) -> Callable:  # type: ignore
+def count_calls(f: Callable) -> Callable:
     """
-        Create and return function that increments the count
-        for that key every time the method is called and returns
-        the value returned by the original method.
-        """
+    Create and return function that increments the count
+    for that key every time the method is called and returns
+    the value returned by the original method.
+    """
     key = f.__qualname__
 
     @wraps(f)
@@ -30,7 +30,6 @@ def count_calls(f: Callable) -> Callable:  # type: ignore
 class Cache:
 
     """ class """
-
     def __init__(self):
         """ Create a Cache class. In the __init__ method,
         store an instance of the Redis client as a private
