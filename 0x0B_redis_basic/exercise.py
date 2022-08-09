@@ -6,22 +6,8 @@ import uuid
 import sys
 from functools import wraps
 
-def count_calls(f: Callable) -> Callable:
-    """
-    Create and return function that increments the count
-    for that key every time the method is called and returns
-    the value returned by the original method.
-    """
-    key = f.__qualname__
-    
-    @wraps(f)
-    def wrapper(self, *args, **kwds):
-        """
-        wrapper function
-        """
-        self._redis.incr(key)
-        return f(self, *args, **kwds)
-    return wrapper  
+
+
 
 class Cache:
     """ class """
@@ -29,6 +15,24 @@ class Cache:
         """ Create a Cache class. In the __init__ method, store an instance of the Redis client as a private variable named _redis (using redis.Redis()) and flush the instance using flushdb. """
         self._redis = redis.Redis()
         self._redis.flushdb()
+        
+    def count_calls(f: Callable) -> Callable:  # type: ignore
+        """
+        Create and return function that increments the count
+        for that key every time the method is called and returns
+        the value returned by the original method.
+        """
+        key = f.__qualname__
+
+        @wraps(f)
+        def wrapper(self, *args, **kwds):
+            """
+            wrapper function
+            """
+            self._redis.incr(key)
+            return f(self, *args, **kwds)
+        return wrapper  
+
     @count_calls
     def store(self, data: Union[str, bytes, int, float]) -> str:
         """ method that takes a data argument and returns a string """
