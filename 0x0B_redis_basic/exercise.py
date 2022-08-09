@@ -11,10 +11,10 @@ from functools import wraps
 
 def count_calls(method: Callable) -> Callable:
     """
-        Create and return function that increments the count
-        for that key every time the method is called and returns
-        the value returned by the original method.
-        """
+    Create and return function that increments the count
+    for that key every time the method is called and returns
+    the value returned by the original method.
+    """
     key = method.__qualname__
 
     @wraps(method)
@@ -24,6 +24,25 @@ def count_calls(method: Callable) -> Callable:
         """
         self._redis.incr(key)
         return method(self, *args, **kwds)
+    return wrapper
+
+def call_history(method: Callable) -> Callable:
+    """
+    Decorator to store the history of inputs and outputs
+    for a particular function.
+    """
+    key = method.__qualname__
+
+    @wraps(method)
+    def wrapper(self, *args):
+        """
+        wrapper function
+        """
+        self._redis.rpush("{}:inputs".format(key), str(args))
+        result = method(self, *args)
+        self._redis.rpush("{}:outputs".format(key),
+                          str(result))
+        return result
     return wrapper
 
 
@@ -38,7 +57,7 @@ class Cache:
         and flush the instance using flushdb. """
         self._redis = redis.Redis()
         self._redis.flushdb()
-
+    @call_history
     @count_calls
     def store(self, data: Union[str, bytes, int, float]) -> str:
         """ method that takes a data argument and returns a string """
