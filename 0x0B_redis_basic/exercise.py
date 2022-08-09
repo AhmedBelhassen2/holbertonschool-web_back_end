@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
-""" The open source, in-memory data store used by millions of developers as a database, cache, streaming engine, and message broker. """
+""" The open source, in-memory data store used
+by millions of developers as a database, cache,
+streaming engine, and message broker. """
 from typing import Union, Callable, Optional
 import redis
 import uuid
@@ -7,15 +9,18 @@ import sys
 from functools import wraps
 
 
-
-
 class Cache:
+
     """ class """
+
     def __init__(self):
-        """ Create a Cache class. In the __init__ method, store an instance of the Redis client as a private variable named _redis (using redis.Redis()) and flush the instance using flushdb. """
+        """ Create a Cache class. In the __init__ method,
+        store an instance of the Redis client as a private
+        variable named _redis (using redis.Redis())
+        and flush the instance using flushdb. """
         self._redis = redis.Redis()
         self._redis.flushdb()
-        
+
     def count_calls(f: Callable) -> Callable:  # type: ignore
         """
         Create and return function that increments the count
@@ -31,7 +36,7 @@ class Cache:
             """
             self._redis.incr(key)
             return f(self, *args, **kwds)
-        return wrapper  
+        return wrapper
 
     @count_calls
     def store(self, data: Union[str, bytes, int, float]) -> str:
@@ -40,8 +45,10 @@ class Cache:
         self._redis.set(key, data)
         return key
 
-    def get(self, key: str, fn: Optional[Callable] = None) -> Union[str, bytes, int, float]:
-        """  This callable will be used to convert the data back to the desired format. """
+    def get(self, key: str, fn:
+            Optional[Callable] = None) -> Union[str, bytes, int, float]:
+        """  This callable will be used to convert
+        the data back to the desired format. """
         rds = self._redis.get(key)
         return fn(rds) if fn else rds
 
@@ -52,5 +59,3 @@ class Cache:
     def get_int(self, data: bytes) -> int:
         """ Converts bytes to int. """
         return int.from_bytes(data, sys.byteorder)
-
-    
