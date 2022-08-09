@@ -9,22 +9,16 @@ import sys
 from functools import wraps
 
 
-def count_calls(f: Callable) -> Callable:
-    """
-    Create and return function that increments the count
-    for that key every time the method is called and returns
-    the value returned by the original method.
-    """
-    key = f.__qualname__
-
-    @wraps(f)
+def count_calls(method: Callable) -> Callable:
+    """ Calls counter decorator """
+    key = method.__qualname__
+    @wraps(method)
     def wrapper(self, *args, **kwds):
-        """
-        wrapper function
-        """
+        """Incrementation method's wrapper"""
         self._redis.incr(key)
-        return f(self, *args, **kwds)
+        return method(self, *args, **kwds)
     return wrapper
+
 
 
 class Cache:
