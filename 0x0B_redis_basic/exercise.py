@@ -28,34 +28,42 @@ def count_calls(f: Callable) -> Callable:
 
 
 class Cache:
+    """ Cache class
+    """
 
-    """ class """
     def __init__(self):
-        """ Create a Cache class. In the __init__ method,
-        store an instance of the Redis client as a private
-        variable named _redis (using redis.Redis())
-        and flush the instance using flushdb. """
+        """ __init __
+        """
         self._redis = redis.Redis()
         self._redis.flushdb()
 
     @count_calls
     def store(self, data: Union[str, bytes, int, float]) -> str:
-        """ method that takes a data argument and returns a string """
-        key = str(uuid.uuid4())
+        """
+        Takes a data argument and returns a string. The method
+        should generate a random key (e.g. using uuid), store the input
+        data in Redis using the random key and return the key.
+        """
+        key = str(uuid.uuid1())
         self._redis.set(key, data)
         return key
 
-    def get(self, key: str, fn:
-            Optional[Callable] = None) -> Union[str, bytes, int, float]:
-        """  This callable will be used to convert
-        the data back to the desired format. """
-        rds = self._redis.get(key)
-        return fn(rds) if fn else rds
+    def get(self,
+            key: str,
+            fn: Optional[Callable] = None) -> Union[str, bytes, int, float]:
+        """  Reading from Redis and recovering original type
+        """
+        res = self._redis.get(key)
+        return fn(res) if fn else res
 
     def get_str(self, data: bytes) -> str:
-        """ Converts bytes to string. """
+        """
+        Converts bytes to string.
+        """
         return data.decode('utf-8')
 
     def get_int(self, data: bytes) -> int:
-        """ Converts bytes to int. """
+        """
+        Converts bytes to int.
+        """
         return int.from_bytes(data, sys.byteorder)
