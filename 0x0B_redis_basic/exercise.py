@@ -13,6 +13,7 @@ def count_calls(f: Callable) -> Callable:
     the value returned by the original method.
     """
     key = f.__qualname__
+    
     @wraps(f)
     def wrapper(self, *args, **kwds):
         """
