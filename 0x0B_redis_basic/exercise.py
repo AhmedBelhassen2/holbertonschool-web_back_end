@@ -9,6 +9,24 @@ import sys
 from functools import wraps
 
 
+def count_calls(f: Callable) -> Callable:  # type: ignore
+    """
+        Create and return function that increments the count
+        for that key every time the method is called and returns
+        the value returned by the original method.
+        """
+    key = f.__qualname__
+
+    @wraps(f)
+    def wrapper(self, *args, **kwds):
+        """
+        wrapper function
+        """
+        self._redis.incr(key)
+        return f(self, *args, **kwds)
+    return wrapper
+
+
 class Cache:
 
     """ class """
@@ -20,23 +38,6 @@ class Cache:
         and flush the instance using flushdb. """
         self._redis = redis.Redis()
         self._redis.flushdb()
-
-    def count_calls(f: Callable) -> Callable:  # type: ignore
-        """
-        Create and return function that increments the count
-        for that key every time the method is called and returns
-        the value returned by the original method.
-        """
-        key = f.__qualname__
-
-        @wraps(f)
-        def wrapper(self, *args, **kwds):
-            """
-            wrapper function
-            """
-            self._redis.incr(key)
-            return f(self, *args, **kwds)
-        return wrapper
 
     @count_calls
     def store(self, data: Union[str, bytes, int, float]) -> str:
