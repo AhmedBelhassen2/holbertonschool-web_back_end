@@ -1,8 +1,7 @@
-CREATE TRIGGER `MyTrigger` 
-    AFTER INSERT ON `products_in_order`
-    FOR EACH ROW 
-    BEGIN
-      UPDATE products
-           SET quantity = quantity-New.quantity
-           WHERE product_code=New.product_code;
-    END;
+-- Write a SQL script that creates a trigger that decreases the quantity of an item after adding a new order.
+CREATE TRIGGER quantityreduce. 
+AFTER INSERT ON orders
+BEGIN
+    UPDATE items SET quantity = quantity - NEW.number
+    WHERE NEW.item_name = name
+END;
