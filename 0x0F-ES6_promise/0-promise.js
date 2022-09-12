@@ -4,4 +4,4 @@ export default function getResponseFromAPI() {
       resolve();
       reject();
     });
-  }
+}
