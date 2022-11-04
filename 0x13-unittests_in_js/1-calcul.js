@@ -1,16 +1,18 @@
-const calculateNumber = (a, b) => { Math.round(a) + Math.round(b);
+const calculateNumber = (a, b) => { 
+    const a = Math.round(a);
+    const b = Math.round(b);
 if (type === 'SUBTRACT') {
-    return aRound - bRound;
+    return a - b;
   }
 
   if (type === 'DIVIDE') {
-    if (bRound === 0) {
+    if (b === 0) {
       return 'Error';
     }
-    return aRound / bRound;
+    return a / b;
   }
 
-  return aRound + bRound;
+  return a + b;
 };
 
 module.exports = calculateNumber;
