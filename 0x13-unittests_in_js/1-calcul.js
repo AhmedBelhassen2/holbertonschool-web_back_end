@@ -1,18 +1,18 @@
-const calculateNumber = (a, b) => { 
-    const a = Math.round(a);
-    const b = Math.round(b);
+const calculateNumber = (type, a, b) => { 
+    const ard = Math.round(a);
+    const brd = Math.round(b);
 if (type === 'SUBTRACT') {
-    return a - b;
+    return ard - brd;
   }
 
   if (type === 'DIVIDE') {
-    if (b === 0) {
+    if (brd === 0) {
       return 'Error';
     }
-    return a / b;
+    return ard / brd;
   }
 
-  return a + b;
+  return ard + brd;
 };
 
 module.exports = calculateNumber;
