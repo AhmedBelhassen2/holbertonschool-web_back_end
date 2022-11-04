@@ -8,7 +8,7 @@ describe('sendPaymentRequestToApi function', () => {
   const spyConsole = sinon.spy(console, 'log');
 
 
-  it('validate the usage of the Utils function', () => {
+  it('has the same math', () => {
     sendPaymentRequestToApi(100, 20);
     expect(spyUtils.calledOnceWithExactly('SUM', 100, 20)).to.be.true;
     expect(spyConsole.calledOnceWithExactly('The total is: 120')).to.be.true;
