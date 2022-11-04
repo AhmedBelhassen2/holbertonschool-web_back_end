@@ -5,6 +5,8 @@ const sendPaymentRequestToApi = require('./3-payment.js');
 
 describe('sendPaymentRequestToApi function', () => {
   const spyUtils = sinon.spy(Utils, 'calculateNumber');
+  const spyConsole = sinon.spy(console, 'log');
+
 
   it('validate the usage of the Utils function', () => {
     sendPaymentRequestToApi(100, 20);
